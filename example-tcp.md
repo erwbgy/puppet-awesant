@@ -32,14 +32,15 @@ Read from a log file and send entries over TCP.
 
     input {
       tcp {
-        format => "plain"
-        port => 5544
         type => "syslog"
+        format => "json_event"
+        port => 5544
       }
     }
     output {
       file {
         type => 'syslog'
+        message_format => "%{@message}"
         path => "/apps/logstash/logs/syslog.log"
       }
     }
