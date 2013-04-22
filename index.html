@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Puppet-awesant : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Puppet-awesant</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/erwbgy/puppet-awesant">View on GitHub</a>
+
+          <h1 id="project_title">Puppet-awesant</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/erwbgy/puppet-awesant/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/erwbgy/puppet-awesant/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>awesant</h1>
+
+<p>Install the awesant log shipper for Logstash with a configuration file.</p>
+
+<p>To use just:</p>
+
+<pre><code>include awesant
+</code></pre>
+
+<p>and then specify the location of the config template in hiera - for example:</p>
+
+<pre><code>awesant::config_template: '/etc/puppet/templates/myapp/awesant-agent.conf.erb'
+</code></pre>
+
+<p>Alternatively you call it as a parameterised class:</p>
+
+<pre><code>class { 'awesant':
+  config_template =&gt; '/etc/puppet/templates/myapp/awesant-agent.conf.erb'
+}
+</code></pre>
+
+<h2>Installation</h2>
+
+<p>Installation assumes that an 'awesant' package is available from the package
+repository.  See <a href="http://download.bloonix.de/">http://download.bloonix.de/</a> for pre-built packages for
+RedHat-like and Debian-like hosts.</p>
+
+<h2>Configuration</h2>
+
+<p>See <a href="https://github.com/bloonix/awesant">https://github.com/bloonix/awesant</a> for documentation on awesant configuration.</p>
+
+<p>By default the following template is used to give you a starting point:</p>
+
+<pre><code>input {
+    file {
+        type awesant
+        tags syslog-messages
+        path /var/log/messages
+    }
+    file {
+        type awesant
+        tags syslog-secure
+        path /var/log/secure
+    }
+}
+
+output {
+    socket {
+        type awesant
+        host logstash.domain.com
+        port 5544
+    }
+}
+
+logger {
+    file {
+        filename /var/log/awesant/agent.log
+        maxlevel info
+    }
+}
+</code></pre>
+
+<p>The corresponding Logstash configuration could be:</p>
+
+<pre><code>input {
+  tcp {
+    format =&gt; "json_event"
+    host =&gt; logstash.domain.com
+    port =&gt; 5544
+    type =&gt; "awesant"
+  }
+}
+filter {
+  grok {
+    match =&gt; [ "@timestamp", "^%{DATE_EU:date}" ]
+    type =&gt; "awesant"
+  }
+}
+output {
+  file {
+    tags =&gt; 'syslog-messages'
+    message_format =&gt; "%{@message}"
+    path =&gt; "/apps/logstash/logs/syslog/messages-%{date}.log"
+  }
+  file {
+    tags =&gt; 'syslog-secure'
+    message_format =&gt; "%{@message}"
+    path =&gt; "/apps/logstash/logs/syslog/secure-%{date}.log"
+  }
+}
+</code></pre>
+
+<p>You can use any facter facts in your template - for example 'fqdn' or a custom fact like 'logstash_host'.</p>
+
+<h2>Support</h2>
+
+<p>License: Apache License, Version 2.0</p>
+
+<p>GitHub URL: <a href="https://github.com/erwbgy/puppet-tomcat">https://github.com/erwbgy/puppet-tomcat</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Puppet-awesant maintained by <a href="https://github.com/erwbgy">erwbgy</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-37513727-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
