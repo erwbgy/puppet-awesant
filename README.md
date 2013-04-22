@@ -1,4 +1,4 @@
-= awesant
+# awesant
 
 Install the awesant log shipper for Logstash with a configuration file.
 
