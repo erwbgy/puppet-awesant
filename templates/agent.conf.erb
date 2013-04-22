@@ -1,0 +1,27 @@
+input {
+    file {
+        type awesant
+        tags syslog-messages
+        path /var/log/messages
+    }
+    file {
+        type awesant
+        tags syslog-secure
+        path /var/log/secure
+    }
+}
+
+output {
+    socket {
+        type awesant
+        host logstash.domain.com
+        port 5544
+    }
+}
+
+logger {
+    file {
+        filename /var/log/awesant/agent.log
+        maxlevel info
+    }
+}

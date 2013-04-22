@@ -1,0 +1,1 @@
+awesant::config_template: '/var/lib/puppet/files/myapp/awesant-agent.conf.erb'
