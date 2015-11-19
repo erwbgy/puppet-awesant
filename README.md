@@ -1,3 +1,7 @@
+# _Unmaintained_
+
+I no longer use Puppet actively and this software has not been maintained for some time.
+
 # awesant
 
 Install the awesant log shipper for Logstash with a configuration file.
