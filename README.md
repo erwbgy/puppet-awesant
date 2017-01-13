@@ -22,9 +22,16 @@ Alternatively you call it as a parameterised class:
 
 ## Installation
 
-Installation assumes that an 'awesant' package is available from the package
+By default, module manages awesant repository creation on Debian systems. It can be 
+disabled by calling module with:
+
+    class { 'awesant':
+      manage_repo => false,
+    }
+
+On other systems installation assumes that an 'awesant' package is available from the package
 repository.  See http://download.bloonix.de/ for pre-built packages for
-RedHat-like and Debian-like hosts.
+RedHat-like hosts and add appropriate repo before using this module.
 
 ## Configuration
 
